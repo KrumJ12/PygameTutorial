@@ -2,9 +2,11 @@
 Vodič v obliki interaktivne spletne strani za uporabo knjižnice Pygame, namenjene programiranju iger v Pythonu
 
 Člani ekipe:
--Jernej Krum
--Domen Gaberšček
--Marko Žugelj
+- Jernej Krum
+- Domen Gaberšček
+- Marko Žugelj
+
+![alt text](https://github.com/KrumJ12/PygameTutorial/blob/master/Slike/naslovnica.PNG "Začetna stran")
 
 O projektu:
 Naredili smo spletno stran za učenje programiranja iger v Pythonu, s pomočjo knjižnice Pygame. Skušali smo pripraviti interaktivni vodič, ki bi na spletni strani približal knjižnico sleherniku, ki je že kdaj kaj sprogramiral v programskem jeziku Python. Pri tem smo se srečali z več izzivi: Učenje HTMLja in CSSja, spoznali smo Javascript ter poglobili znanja Pythona.
