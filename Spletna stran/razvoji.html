@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="sl">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <title>Programirajmo igre v Pythonu</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="bootstrap/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="theme.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="bootstrap/assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	
+	<link rel=stylesheet href="lib/codemirror.css">
+	<script src="lib/codemirror.js"></script>
+	<script src="lib/codemirror_mode/python/python.js"></script>
+	<script src="skrivanje.js"></script>
+
+	<style>
+	  .CodeMirror { height: auto; border: 1px solid #ddd; }
+	  .CodeMirror-scroll { max-height: 500px; }
+	  .CodeMirror pre { padding-left: 7px; line-height: 1.00; }
+	</style>
+	
+	
+	
+	
+	
+	
+	
+	
+  </head>
+<body onload="skrijKaco(); skrijLokostrelca();skrijZogo()" role="document">
+
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="index.html">Domov</a></li>
+            <li ><a href="oPygame.html">O Pygame</a></li>
+	    
+            <li><a href="osnove.html">Zbirka ukazov</a></li>
+
+            <li class="dropdown">
+              <a href="razvoji.html" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Razvoj aplikacij<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="razvoji.html#kaca">Igra - Kača</a></li>
+                <li><a href="razvoji.html#zogica">Igra - Žogica</a></li>
+                <li><a href="razvoji.html#lokostrelec">Igra - Lokostrelec</a></li>
+
+              </ul>
+            </li>
+		<li><a href="kvizi.html">Kvizi</a></li>
+	    <li><a href="zgledi.html">Končni zgledi</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+	
+	<div class="container theme-showcase" role="main">
+
+
+				  <div class="page-header">
+					<h1 id="kaca">Razvoj igre - Kača</h1>
+				  </div>
+<img id="puscica" src="slike/puscica.png" onclick="skrijKaco()" height="40"> </img>
+<br> <br>
+<div id="kacaVse">
+				  <div class="well">
+					<p>
+					Prva igra, ki se je bomo lotili s pomočjo knjižnice Pygame je igra Kača. Gre za zelo znano, zabavno igro,
+					v kateri vodite kačo po omejenem polju, pri tem pobirate sadeže in skušate kačo pripeljati čim dlje.
+					</p>
+					
+				  </div>
+
+				  <img src="slike/kaca.png" alt="Igra_kaca"  style="width:150px;"/>
+<br> <br>
+<a href="zgledi.html#videoKaca" target="_blank">Klikni tukaj za ogled videa.</a>
+
+			  <br> <br>
+				  Za začetek si pripravimo ogrodje naše igre.
+				  Potrebovali bomo naslednje module:
+				  <ul>
+				  <li>
+				  modul Pygame
+				  </li>
+				  <li>
+				  modul Time
+				  </li>
+				  <li>
+				  modul Random
+				  </li>
+				  </ul>
+				  
+				  Zato jih tudi uvozimo. Z ukazom <code>pygame.init()</code> vedno poženemo funkcije iz modula Pygame.
+				  Podobno jih na koncu z ukazom <code>pygame.quit()</code> zaustavimo.
+				  
+				  Osnovne barve, ki jih bomo potrebovali, definiramo tu. Barvo zapišemo v obliki nabora RGB.
+				  Hitrost 15 sličic na sekundo bo za to igro dovolj. Nastavimo še privzeto smer kače - desno in pa dimenzije
+				  našega igralnega okna (poljubno).
+				  
+				  
+				  <section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext2>
+import pygame
+import time
+import random
+
+pygame.init() 
+bela = (255,255,255)
+crna = (0,0,0)
+modra = (0,0,255)
+rdeca = (255,0,0)
+pisano = (150,100,200)
+FPS = 15
+
+smer = "desno"
+platno_x = 1100
+platno_y = 600
+			</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext2"), {
+				  lineNumbers: true,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+				  
+				  <br>
+				Sedaj, ko imamo določene dimenzije platna, lahko ustvarimo naše platno z ukazom <code>display.set_mode()</code>,
+				ki mu podamo x in y koordinato.
+				
+				Z ukazom <code>set_caption("niz")</code> poimenujemo igro in naložimo še osnovne elemente, ki jih bomo potrebovali:
+				<ul>
+				<li>glavo kače</li>
+				<li>telo kače</li>
+				<li>sadež - jabolko</li>
+				</ul>
+				  
+				Ker bomo spremljali čas, potrebujemo še uro. Ta se nahaja v modulu Time, pisave pa v modulu Font.
+				  
+				  <section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext3>
+platno = pygame.display.set_mode((platno_x,platno_y))
+pygame.display.set_caption("MOJA IGRA") 
+glava = pygame.image.load('snake.png')
+telo = pygame.image.load('telo.png')
+
+jabolko = pygame.image.load('jabolko.png')
+ura = pygame.time.Clock() 
+font = pygame.font.SysFont(None,40)
+			</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext3"), {
+				  lineNumbers: true,
+				  firstLineNumber: 17,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			</section>
+				  <br>
+				  
+				  Če poženemo do sedaj spisan program, dobimo zgolj črno platno izbranih dimenzij.
+				  Elementov, ki smo jih naložili, pa ni na vidik. Te bomo prikazali v nadaljevanju.
+				  
+				  <br>
+				  <br>
+				  
+				  <img src="slike/platno_uvod.png" alt="Platno_zacetek"  style="width:650px;"/>
+				  
+				  
+				  
+				  				  <section id=demo>
+							<br>	  
+				Preden definiramo glavno funkcijo igra,
+definirajmo še dve pomožni funkciji. Prva bo služila za izpis besedila,
+druga pa za izris premika kače. <br> 
+Pri funkciji za izpis uporabimo ukaz <code>render</code> na modulu font za oblikovanje
+in pa ukaz <code>blit</code> za prikaz besedila na platnu. Pri tem moramo podati, kaj in kam želimo prikazati.
+Koordinate veljajo za zgornji levi rob besedila.
+<br><br>
+Pri funkciji za izris glede na smer(ki je mimogrede globalna spremenljivka, definirana kasneje v objektu),
+ustrezno zarotiramo glavo naše kače. Uporabimo ukaz <code>transform.rotate</code> in povemo kaj in za kakšen kot v stopinjah želimo zasuk.
+Z ukazom <code>blit</code> prikažemo spremembo na platnu - tako za glavo kot telo kače.
+								  
+								  
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext4>
+def sporocilo(msg,barva):   
+    besedilo = font.render(msg, True, barva)
+    platno.blit(besedilo, [platno_x/7,platno_y/2])
+
+def kaca(nasaVelikost,seznamKace):
+    if smer == "gor":
+        glavaPoz = pygame.transform.rotate(glava,180)
+    if smer == "levo":
+        glavaPoz = pygame.transform.rotate(glava,270)
+    if smer == "desno":
+        glavaPoz = pygame.transform.rotate(glava,90)
+    if smer == "dol":
+        glavaPoz = glava
+        
+    platno.blit(glavaPoz, (seznamKace[-1][0],seznamKace[-1][1]))
+    
+    for XY in seznamKace[:-1]:
+        platno.blit(telo, (XY[0],XY[1]))
+			</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext4"), {
+				  lineNumbers: true,
+				  firstLineNumber: 26,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			</section>
+				  
+				<br>  
+		
+Naša glavna funkcija se imenuje igra. Na začetku definirajmo spremenljivko <code>smer</code>, 
+ki ji dodelimo globalno vlogo. Smer bomo namreč potrebovali ves čas pri izrisu v 
+pomožni, zgoraj definirani funkciji. Potrebujemo še spremenljivki <code>igraIzhod</code> in 
+<code>igraKonec</code>, ki jih na začetku nastavimo na <code>False</code>. Izberimo velikost kače, v našem 
+primeru 20, prav tako naj bo tudi velikost jabolka 20.
+
+<br> <br>
+
+Shraniti si moramo začetek naše kače. Za lep izgled nastavimo koordinate 
+tako, da kača v celoti poje jabolko. Torej kača lahko v celoti pogoltne jabolko, 
+ali pa jo zgreši. Kača naj začne na sredini platna, seveda ne smemo pozabiti da ti 
+koordinati predstavljata levi zgornji kot, zato jima odštejemo polovico velikosti kače. 
+Koordinate nato delimo z 20, jih zaokrožimo, ter nazaj množimo z 20. Tako sta koordinati 
+zagotovo večkratni 20 (20 je velikost kače).
+
+<br> <br>
+
+Naša kača se seveda mora tudi premikati. Hitrost kače razdelimo na hitrost v smeri x 
+in hitrost v smeri y. V začetku naj se kača premika v desno. Hitrost mora biti enaka 
+velikosti, zato da sta koordinati vedno večkratni z njeno velikostjo. V našem primeru je to 20.
+
+<br> <br>
+
+Ko bo kača pojedla jabolko, se ji bo povečala dolžina telesa. Priročno je, da ves čas 
+hranimo njeno dolžino, zato jo shranimo v spremenljivko <code>dolzinaKace</code>. V spremenljivko 
+<code>seznamKace</code> si shranimo prazen seznam. V ta seznam bomo dodajali nove segmente kače, 
+ko bo kača pojedla jabolko. Tako ko bomo risali kačo, se bomo sprehodili čez seznam in narisali vsak kos.
+Podobno kot koordinate kače si shranimo še koordinate našega jabolka. Pri tem naj bodo koordinate naključne.
+		
+		
+		<br>
+
+		
+				  
+			<!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext5>
+def igra():
+    global smer
+    igraIzhod = False 
+    igraKonec = False
+
+    nasaVelikost = 20
+    velikostKocke = 20
+    
+    koord_x = round((platno_x/2 - 10)/20)*20
+    koord_y = round((platno_y/2 - 10)/20)*20
+    sprememba_x = nasaVelikost
+    sprememba_y = 0
+
+    dolzinaKace = 1
+    seznamKace = []
+    
+    kockaX = round(random.randrange(0,platno_x - velikostKocke)/20)*20
+    kockaY = round(random.randrange(0,platno_y - velikostKocke)/20)*20
+			</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext5"), {
+				  lineNumbers: true,
+				  firstLineNumber: 45,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			</section>	  
+				  
+			<br>
+Celotna igra bo potekala znotraj zanke. Ves čas preverjamo, če smo se zaleteli. Če se zaletimo,  
+pobarvamo platno belo in izpišemo željeno besedilo. Uporabniku dodajmo možnost ponovne igre. 
+
+<br> <br>
+S for zanko pogledamo po dogodkih. Pogledamo, če je tipka pritisnjena z ukazom <code>if event.type == pygame.KEYDOWN:</code>
+Nato pogledamo, katera tipka je pritisnjena. Če bo uporabniki pritisnil p, se bo igra ponovno pognala, 
+zato kličemo našo glavno funkcijo. Če pa uporabnik pritisni tipko i za izhod, nastavimo naši spremenljivki
+ na <code>True</code> oz. <code>False</code>, da skočimo iz zanke in se igra zaključi.
+ 
+ <br> <br>
+V primeru, da se uporabnik ni zaletel pogledamo po dogodkih. Pogledamo, če je pritisnjen križec, 
+nato za pritisk smernih tipk za upravljanje kače. Če je pritisnjena katera izmed smernih tipk, 
+spremenimo spremenljivko smer v ustrezen niz. Pozorni morami biti, če uporabnik želi obrniti 
+smer za 180 stopinj. V tem primeru bi se kača zaletela sama vase. Recimo, da tipka ne bo zaznana
+ če se bo uporabnik želel obrniti za 180 stopinj. To naredimo tako, da dodamo dodaten ukaz, 
+ ko preverjamo katera tipka je pritisnjena. Ko se kača obrne, moramo spremeniti tudi njeno hitrost. 
+	
+				  
+				<!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext6>
+    while not igraIzhod:
+
+        while igraKonec == True:
+            platno.fill(bela)
+            sporocilo("ZALETEL SI SE, PRITISNI P ZA PONOVNO IGRANJE, I ZA IZHOD",pisano)
+            pygame.display.update()
+
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_p:
+                        igra()
+                    if event.key == pygame.K_i:
+                        igraIzhod = True
+                        igraKonec = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: 
+                igraIzhod = True
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT and smer != "desno":
+                    smer = "levo"
+                    sprememba_x = -nasaVelikost
+                    sprememba_y = 0
+                if event.key == pygame.K_RIGHT and smer != "levo":
+                    smer = "desno"
+                    sprememba_x = nasaVelikost
+                    sprememba_y = 0
+                if event.key == pygame.K_UP and smer != "dol":
+                    smer = "gor"
+                    sprememba_y = -nasaVelikost
+                    sprememba_x = 0
+                if event.key == pygame.K_DOWN and smer != "gor":
+                    smer = "dol"
+                    sprememba_y = nasaVelikost
+                    sprememba_x = 0
+			</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext6"), {
+				  lineNumbers: true,
+				  firstLineNumber: 64,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			</section>			  
+		<br>
+Na vsakem koraku še preverimo, če smo se morda zaleteli - bodisi sami vase, 
+bodisi smo šli ven iz omejenega območja - platna. Za pregled, v primeru da smo 
+se zaleteli sami vase, uporabimo seznam. V seznamu so koordinate posameznih delov 
+kače in če je glava na mestu, kjer je že en segment, smo se zaleteli.
+
+<br> <br>
+Za pregled, če smo se zaleteli v rob, preverimo ali sta x in y koordinati v našem območju platna.
+Nato preverimo še, ali smo pojedli jabolko. To naredimo podobno kot pri preverjanju 
+trka z robom platna. Seveda, če je kača pojedla jabolko, moramo v seznam dodati nove 
+koordinate, ki bodo predstavljale nov segment.
+
+<br> <br>
+Da se bo kača zares premikala, moramo spremeniti koordinate kače. Na vsakem koraku 
+povečamo koordinati za hitrost v smeri x in y.
+	  
+				  
+					<!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext7>
+        for kosKace in seznamKace[:-1]:
+            if kosKace == glavaKace:
+                igraKonec = True
+        
+        if koord_x + nasaVelikost > platno_x or koord_x < 0 or koord_y + nasaVelikost > platno_y or koord_y < 0:
+            igraKonec = True
+
+        if kockaX - nasaVelikost < koord_x < kockaX + velikostKocke and kockaY - nasaVelikost < koord_y < kockaY + velikostKocke:
+            kockaX = round(random.randrange(0,platno_x - velikostKocke)/20)*20
+            kockaY = round(random.randrange(0,platno_y - velikostKocke)/20)*20
+            seznamKace.append(glavaKace)
+
+        koord_x += sprememba_x
+        koord_y += sprememba_y			</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext7"), {
+				  lineNumbers: true,
+				  firstLineNumber: 99,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			</section>		  
+				  
+					<!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  
+			  
+			  
+			  		
+		Vse skupaj moramo še izrisati. Najprej pobarvamo platno belo. 
+		Nato izrišemo jabolko na shranjenih koordinatah. Shraniti si 
+		moramo položaj glave in jo dodati v seznam, da lahko celotno 
+		kačo narišemo. Na vsakem koraku dodamo glavo v seznam, 
+		zato moramo rep kače, torej zadnji segment izbrisati, to preverimo
+		s preprostim <code>if</code> stavkom. 
+		
+		<br> <br>
+		
+		Nato še poženemo funkcijo, ki smo 
+		jo zgoraj definirali in z ukazom  <code>pygame.display.update()</code>   
+		posodobimo platno. Da uravnavamo hitrost igre še kličemo ukaz <code>ura.tick(FPS)</code>.
+Ko skočimo iz zanke moramo še klicati ukaza <code>pygame.quit()</code> in <code>quit()</code>, 
+da zaključimo funkcije v pygame-u ter zapremo aplikacijo. 
+Nato še izven funkcije kličemo našo glavno funkcijo, tako da ko poženemo program, se požene tudi naša igra.
+			  
+			  
+			  
+			  <br> 	  
+			  
+			  
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext8>
+		platno.fill(bela)  
+        platno.blit(jabolko,[kockaX,kockaY])
+        
+        glavaKace = []
+        glavaKace.append(koord_x)
+        glavaKace.append(koord_y)
+        seznamKace.append(glavaKace)
+
+        if len(seznamKace) > dolzinaKace:
+            del seznamKace[0]
+        
+        kaca(nasaVelikost,seznamKace)
+        
+        pygame.display.update()  
+        ura.tick(FPS) 
+
+    pygame.quit()
+    quit()
+
+igra()			</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext8"), {
+				  lineNumbers: true,
+				  firstLineNumber: 113,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+		<br>
+		
+
+		
+		
+		
+		
+		<a  href="KACA.zip" class="btn btn-primary" downoload>Prenesi me!</a>
+
+			</section>		  
+				  
+</div>
+				  <div class="page-header">
+					<h1 id="zogica">Razvoj igre - Žogica</h1>
+				  </div>
+				  
+				  
+	
+<br> <br>			  
+<img id="p1" src="slike/puscica.png" onclick="skrijZogo()" height="40"> </img>
+<div id="zogaVse">	
+<a href="zgledi.html#videoZogica" target="_blank">Klikni tukaj za ogled videa.</a>			  
+				  <div class="well">
+						<p>Žogica z gravitacijo 1.stopnja</p>
+				  </div>
+
+				  <img src="slike/zog1.png" alt="Igra_kaca"  style="width:150px;"/>
+				  
+		<section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext20>
+import pygame
+
+pygame.init()
+
+platno_x = 800
+platno_y = 600
+
+
+bela = (255,255,255)
+crna = (0,0,0)
+
+platno = pygame.display.set_mode((platno_x,platno_y))</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext20"), {
+				  lineNumbers: true,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>		  
+
+			<br>
+			<br>
+			
+Najprej uvozimo knjižnico pygame z ukazom <code>import pygame</code>, nato še poženemo vse funkcije z ukazom <code>pygame.init()</code>. Ta dva ukaza vedno potrebujemo, ko uporabljamo knjižnico pygame.
+Za začetek bomo na platno narisali črn krog, ki bo predstavljal našo žogico. Najprej si definiramo velikosti platna, ter črno in belo barvo. Barve definiramo s trojico števil, ki predstavljajo RGB nabor. Ko imamo dimenzije platna ga ustvarimo z ukazom <code>pygame.display.set_mode()</code>. V ukaz vstavimo nabor (x,y), ki predstavljata širino in višino platna.
+
+
+							  <section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext21>
+class krog():
+    def __init__(self,poz,r):
+        self.pozicija = poz
+        self.radij = r</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext21"), {
+				  lineNumbers: true,
+				  firstLineNumber: 13,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>			
+
+<br> <br>
+Ker bo naša žogica v nadaljevanju mela več funkcij, je smiselno da sestavimo razred. 
+Zaenkrat naši žogici definiramo le pozicijo središča in njen radij. 
+
+
+
+							  <section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext22>
+def zogica():
+    pozicija = (200,200)
+    radij = 25                     
+    
+    krogec = krog(pozicija,radij)  </textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext22"), {
+				  lineNumbers: true,
+				  firstLineNumber: 17,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+        
+		<br><br>
+Za »glavo« naše aplikacije definiramo novo funkcijo (zogica). Zmislimo si vrednosti, 
+kje bo začetna pozicija naše žogice, ter njen radij. Naredimo tudi novi objekt krogec, ki mu priredimo te vrednosti.
+
+
+
+							  <section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext23>
+def zogica():
+    pozicija = (200,200)
+    radij = 25                     
+    
+    krogec = krog(pozicija,radij)  
+    
+    izhod = False
+    while not izhod:
+        
+        for dogodek in pygame.event.get():
+            if dogodek.type == pygame.QUIT: 
+                izhod = True
+                
+        platno.fill(bela)
+        pygame.draw.circle(platno,crna,[int(krogec.pozicija[0]),int(krogec.pozicija[1])],krogec.radij,0) #krogec narišemo
+        pygame.display.update([[100,100,200,100],[350,350,360,360]])
+            
+    pygame.quit()
+    quit()
+    
+zogica()    </textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext23"), {
+				  lineNumbers: true,
+				  firstLineNumber: 22,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+        
+		<br><br>
+
+Za glavni del funkcije uporabimo <code>while</code> zanko. Definiramo novo spremenljivko z vrednostjo <code>False</code>, 
+tako lahko upravljamo, koliko časa se bo naša aplikacija izvajala. Za vsako aplikacijo moramo 
+znotraj glavne funkcije tudi definirati for zanki, ki ves čas pregleduje dogodke znotraj aplikacije.
+ To naredimo z ukazom <code>for dogodek in pygame.event.get()</code>. 
+ <br> <br>
+ 
+ 
+ Za prvi dogodek si poglejmo dogodek QUIT. 
+ To je dogodek, ki se zgodi, če uporabnik pritisne na rdeči križec v zgornjem desnem kotu (običajno se tako aplikacijo zapre). 
+ Tako lahko z ukazom <code>if dogodek.type == pygame.QUIT</code> definiramo kaj se bo zgodilo, ko bo uporabnik pritisnil rdeči križec. 
+ Recimo, da se tudi naša aplikacija s tem dogodkom zapre. To naredimo tako, da v spremenljivko izhod shranimo
+ vrednost <code>True</code> in s tem skočimo iz zanke. 
+ 
+ <br> <br>
+ 
+ Za konec uvodnega dela si poglejmo še ukaze za risanje. 
+ Z ukazom <code>platno.fill()</code> pobarvamo platno. Ker smo si že definirali belo barvo, ga pobarvajmo z belo. 
+ Da narišemo našo žogico uporabimo ukaz <code>pygame.draw.circle(površina,barva,pozicija,radij,debelina)</code>. 
+ Površina predstavlja naše platno. Pozicija mora biti nabor ali seznam dveh celih števil (x,y), to je središče kroga. 
+ Radij je radij kroga in debelina predstavlja debelino črte našega kroga. Če za debelino vzamemo 0, potem bo krog zapolnjen.
+ 
+ 
+ <br> <br>
+ Na koncu zanke uporabimo še ukaz <code>pygame.display.update()</code>, ki posodobi platno. Ukaz sprejme tudi parameter 
+ in sicer seznam pravokotnikov, če ne želimo posodobiti celotnega platna. Pravokotniki imajo obliko (x,y,d,h),
+ kjer x in y predstavljata levi zgornji kot pravokotnika, d velikost v smeri x in h velikost v smeri y. 
+ 
+ 
+ <br> <br>
+ Ko pridemo iz zanke je lepo da ustavimo vse funkcije, ki smo jih pognali z ukazom <code>pygame.init()</code>. 
+ To naredimo z ukazom <code>pygame.quit()</code>. Da še zapremo našo aplikacijo napišemo ukaz <code>quit()</code>.
+Da se bo aplikacija sama zagnala lahko za konec še pokličemo našo funkcijo.
+
+<br> <br>
+				  
+				  
+		<a  href="zogica1.zip" class="btn btn-primary" downoload>Prenesi me!</a>					  
+				  
+<br> <br>
+				  
+<div class="well">
+						<p>Žogica z gravitacijo - 2.stopnja</p>
+				  </div>
+				  
+ <img src="slike/zog1.png" alt="Igra_kaca"  style="width:150px;"/>
+				  
+									  <section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext41>
+pygame.init()
+
+platno_x = 800
+platno_y = 600
+
+platnoDim = (platno_x,platno_y)
+bela = (255,255,255)
+crna = (0,0,0)
+
+FPS = 60
+ura = pygame.time.Clock()
+
+platno = pygame.display.set_mode((platno_x,platno_y))</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext41"), {
+				  lineNumbers: true,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+        
+		<br><br>		  
+				  
+Do sedaj smo žogico le narisali, sedaj pa hočemo, da nanjo vpliva gravitacija. 
+Na začetek si shranimo še dve spremenljivki. Spremenljivka <code>FPS</code>, bo upravljala, 
+kako hitro se bo naša aplikacija izvajala. Potrebujemo tud spremenljivko, ki bo spremljala čas. Shranimo jo pod <code>ura</code>.
+				  
+				  
+								  <section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext42>
+class krog():
+    def __init__(self,poz,r,v=0,g=10):
+        self.pozicija = poz
+        self.radij = r
+        self.gravitacija = g
+        self.hitrost = v
+
+    def pospesi(self):
+        """Zaradi gravitacije krogec pospešuje"""
+        v = self.hitrost + self.gravitacija
+        self.hitrost = v</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext42"), {
+				  lineNumbers: true,
+				  firstLineNumber: 14,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+        
+		<br><br>			  
+				  
+Ker se bo žogica premikala potrebujemo tudi novi spremeljivki za naš objekt(žogico). 
+Shranimo hitrost pod <code>v</code> in gravitacijski pospešek pod <code>g</code>. Lahko privzamemo vrednosti 0, 
+saj se žogica na začetku ne premika in pospešek 10, saj gravitacija deluje ves čas enako.
+Ko bo na žogico delovala gravitacija, bo ves čas pospeševala, zato si definiramo novo 
+funkcijo <code>pospesi</code>. Vsak trenutek bo žogica pospešila za velikost gravitacije, tako hitrost povečamo in jo shranimo.
+
+
+				  
+				  
+								  <section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext43>
+def zogica():
+    g0 = 25/FPS                     
+    pozicija = (200,200)
+    radij = 25                     
+    
+    krogec = krog(pozicija,radij,g=g0)</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext43"), {
+				  lineNumbers: true,
+				  firstLineNumber: 25,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+        
+		<br><br>				  
+				  
+Gravitacijo je težko določiti, saj računalnik šteje čas drugače kot mi. 
+Za konstantni gravitacijski pospešek je potrebno preizkusiti, kakšna velikost zgleda vredu.
+ Ko bomo <code>FPS</code>, torej hitrost izvajanja aplikacije povečevali, 
+ bi bila gravitacija zelo velika, če bi bila konstantna, 
+ zato je dobro če <code>FPS</code> postavimo v imenovalec ulomka, tako bo gravitacija 
+ neodvisna od spremenljivke <code>FPS</code>. Ko naredimo objekt krogec, mu moramo dodati še našo gravitacijo.
+
+
+				  
+								  <section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext44>
+    izhod = False
+    while not izhod:
+        krogec.pospesi()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: 
+                izhod = True
+        krogec.pozicija = (krogec.pozicija[0] ,krogec.pozicija[1] + krogec.hitrost)
+        ura.tick(FPS)
+        platno.fill(bela)
+        pygame.draw.circle(platno,crna,[int(krogec.pozicija[0]),int(krogec.pozicija[1])],krogec.radij,0) #krogec narišemo
+        pygame.display.update()
+            
+    pygame.quit()
+    quit()
+
+zogica() </textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext44"), {
+				  lineNumbers: true,
+				  firstLineNumber: 31,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+        
+		<br><br>				  
+				  
+Vsakič ko se požene zanka, je novi trenutek za našo žogico, 
+zato jo pospešimo s funkcijo, ki smo jo definirali v razredu. 
+Ta funkcija samo poveča hitrost žogice. Da spravimo našo žogico v 
+premikajoče stanje, ji moramo spremeniti pozicijo. 
+Ker bo trenutno na našo žogico vplivala samo gravitacija, 
+spreminjamo samo y pozicijo naše žogice. 
+Torej vsak trenutek prištejemo y koortidani njeno hitrost, če bo hitrost večja se bo žogica dlje premaknila.
+
+<br> <br>
+
+	  
+		<a  href="zogica2.zip" class="btn btn-primary" downoload>Prenesi me!</a>				
+
+
+<br> <br>
+
+
+<div class="well">
+						<p>Žogica z gravitacijo - 3.stopnja</p>
+				  </div>
+				  
+ <img src="slike/zog3.png" alt="Igra_kaca"  style="width:150px;"/>
+				  
+									  <section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext100>
+import pygame
+
+pygame.init()
+
+platno_x = 800
+platno_y = 600
+
+platnoDim = (platno_x,platno_y)
+bela = (255,255,255)
+zelena = (0,160,0)
+crna = (0,0,0)
+
+FPS = 60
+
+platno = pygame.display.set_mode((platno_x,platno_y))
+ura = pygame.time.Clock()</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext100"), {
+				  lineNumbers: true,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+        
+		<br><br>		  
+				  
+Sedaj imamo žogico na katero vpliva gravitacija. Sedaj dodajmo še tla, ki bodo ustavila našo žogico. 
+Tla naj bodo zelene barve, zato definiramo še eno trojico, ki bo predstavljala zeleno barvo.
+				  
+				  
+								  <section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext101>
+class krog():
+    def __init__(self,poz,r,v=0,g=10):
+        self.pozicija = poz
+        self.radij = r
+        self.gravitacija = g
+        self.hitrost = v
+
+    def pospesi(self):
+        """Zaradi gravitacije krogec pospešuje"""
+        v = self.hitrost + self.gravitacija
+        self.hitrost = v
+
+    def na_tleh(self,tla):
+        """Preverimo ali se krog dotika tal."""
+        if self.pozicija[1] + self.radij >= tla:
+            return True
+        return False</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext101"), {
+				  lineNumbers: true,
+				  firstLineNumber: 17,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+        
+		<br><br>			  
+				  
+Smiselno je, da dodamo metodo k razredu, s katero preverimo ali je žogica že na tleh. 
+Žogica bo na tleh, če bo njena pozicija središča skupaj z radijem večja od pozicije tal. 
+Kot parameter bo metoda dobila pozicijo, kje so tla. 
+Tla bodo v našem primeru predstavljal pravokotnik. 
+Torej če je žogica na tleh bo naša metoda vrnila <code>True</code>, sicer bo vrnila <code>False</code>.
+
+
+				  
+				  
+								  <section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext102>
+def zogica():
+    g0 = 25/FPS                     
+    pozicija = (200,200)
+    radij = 25                     
+    
+    krogec = krog(pozicija,radij,g=g0)  
+    
+    izhod = False
+    while not izhod:
+        krogec.pospesi()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: 
+                izhod = True
+        krogec.pozicija = (krogec.pozicija[0] ,krogec.pozicija[1] + krogec.hitrost)
+
+        if krogec.na_tleh(platnoDim[1]-100):
+            krogec.hitrost = 0
+            krogec.pozicija = (krogec.pozicija[0],-krogec.radij + platnoDim[1]-100)
+        
+        ura.tick(FPS)
+        platno.fill(bela)
+        pygame.draw.rect(platno,zelena,[0,platnoDim[1]-100,platnoDim[0],platnoDim[1]])                   
+        pygame.draw.circle(platno,crna,[int(krogec.pozicija[0]),int(krogec.pozicija[1])],krogec.radij,0) 
+        pygame.display.update()
+            
+    pygame.quit()
+    quit()
+
+zogica()     </textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext102"), {
+				  lineNumbers: true,
+				  firstLineNumber: 34,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+        
+		<br><br>				  
+				  
+Sedaj implementirajmo še našo glavno funkcijo. 
+Najprej preverimo, če je žogica že v območju, kjer so tla. 
+Tla bodo v tem primeru 100 enot od spodnjega roba. Če je žogica 
+na tem območju, ji postavimo hitrost na 0, saj se ne sme premikati, ko je na tleh. 
+Tudi pozicijo ji spremenimo tako, da stoji na tleh, v nasprotnem primeru bi zgledalo kot da se žogica pogrezne v tla.
+
+<br> <br>
+				  
+Tla moramo še narisati. Predstavljal jih bo pravokotnik. 
+Uporabimo ukaz <code>pygame.draw.rect()</code>, kjer prvi parameter 
+predstavlja kam bomo risali-platno, drugi predstavlja barvo-zelena, 
+tretji pa seznam [x1,y1,x2,y2], kjer sta x1 in y1 levi zgornji 
+kot pravokotnika, x2 in y2 pa desni spodnji kot.
+
+
+<br> <br>
+
+		<a  href="zogica3.zip" class="btn btn-primary" downoload>Prenesi me!</a>	
+
+<br> <br> 
+
+
+<div class="well">
+						<p>Žogica z gravitacijo - 4.stopnja</p>
+				  </div>
+				  
+ <img src="slike/zog4.png" alt="Igra_kaca"  style="width:150px;"/>
+				  
+									  <section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext110>
+import pygame
+
+pygame.init()
+
+platno_x = 800
+platno_y = 600
+
+platnoDim = (platno_x,platno_y)
+bela = (255,255,255)
+zelena = (0,160,0)
+crna = (0,0,0)
+
+FPS = 60
+
+platno = pygame.display.set_mode((platno_x,platno_y))
+ura = pygame.time.Clock()</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext110"), {
+				  lineNumbers: true,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+        
+		<br><br>		  
+				  
+Žogico želimo sedaj še premikati z miško. Za to bomo potrebovali novo metodo v našem razredu. 
+Metoda bo delovala tako, da ko uporabnik klikne z miško, bo preverila, ali smo kliknili na našo žogico.
+ Zato mora metoda dobiti parameter, ki predstavlja pozicijo (x,y) miške. Žogica bo pritisnjena, 
+če bo razdalja od pozicije miške do središča žogice manjša od radija naše žogice. V tem primeru 
+metoda vrne <code>True</code>, sicer vrne <code>False</code>.
+				  
+				  
+								  <section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext111>
+class krog():
+    def __init__(self,poz,r,v=(0,0),g=10,pritisnjen = False,prijem = (0,0)):
+        self.pozicija = poz
+        self.radij = r
+        self.gravitacija = g
+        self.hitrost = v
+        self.pritisnjen = pritisnjen
+        self.prijem = prijem
+
+    def pospesi(self):
+        """Zaradi gravitacije krogec pospešuje"""
+        vx = 0
+        vy = self.hitrost[1] + self.gravitacija
+        self.hitrost = (vx,vy)
+
+    def na_tleh(self,tla):
+        """Preverimo ali se krog dotika tal."""
+        if self.pozicija[1] + self.radij >= tla:
+            return True
+        return False
+
+        
+    def klik_z_misko(self,miska_poz):
+        """Preverimo ali je krog kliknjen z misko."""
+        if (self.pozicija[0]-miska_poz[0])**2 + (self.pozicija[1]-miska_poz[1])**2 <= self.radij**2:
+            return True
+        return False
+    
+    def primi_z_misko(self,miska_poz):
+        """Krog primemo z misko, in si zapomnimo kje smo ga prijeli."""
+        self.hitrost = (0,0)
+        self.gravitacija = 0
+        self.pritisnjen = True
+        self.prijem = (miska_poz[0]-self.pozicija[0],miska_poz[1]-self.pozicija[1])</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext111"), {
+				  lineNumbers: true,
+				  firstLineNumber: 17,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+        
+		<br><br>			  
+				  
+S prejšnjo metodo smo samo preverili, ali smo kliknili z miško na žogico, 
+sedaj pa potrebujemo še metodo , s katero bomo dobili podatek, kje od središča smo jo prijeli. 
+Potrebovali bomo nove spremenljivke o žogici. 
+
+<br> <br>
+
+Kot prvo se bo žogica sedaj lahko premikala tudi v smeri x, zato spremenimo hitrost v nabor 
+(hitrost_x, hitrost_y). Pozorni moramo biti na to, kje smo uporabljali spremenljivko hitrost, 
+saj je sedaj hitrost kot nabor, ne več število. Dodamo še dva parametra: <code>pritisnjen</code>, ki ima vrednost <code>True</code>, 
+če z miško držimo žogico, <code>False</code> sicer, ter parameter <code>prijem</code>, v katerega shranimo pozicijo miške ko smo prijeli žogico. 
+Smiselno je, da si shranimo, kje smo žogico prijeli, da ko jo bomo premikali bo žogica vedno na razdalji kot smo jo 
+prijeli. V nasprotnem primeru bi žogica skočila vedno tako da bi bilo njeno središče na položaju miške.
+
+<br> <br>
+
+Ko bomo prijeli žogico z miško, mora žogica mirovati, zato ji nastavimo <code>hitrost</code> na (0,0), 
+ter <code>gravitacijo</code> na 0. Spremenljivko <code>pritisnjen</code> ji nastavimo na <code>True</code>, 
+saj žogico držimo. Shranimo si tudi pozicijo prijema, koliko po x in y stran od središča smo jo prijeli.
+
+				  
+				  
+								  <section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext112>
+def zogica():
+    g0 = 25/FPS                     
+    pozicija = (200,200)
+    radij = 25                     
+    
+    krogec = krog(pozicija,radij,g=g0)  
+    
+    izhod = False
+    while not izhod:
+        miska = pygame.mouse.get_pos()
+        krogec.pospesi()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: #ko pritisnemo križec
+                izhod = True
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1 and krogec.klik_z_misko(miska):
+                    krogec.primi_z_misko(miska)
+            if event.type == pygame.MOUSEBUTTONUP and krogec.pritisnjen == True:
+                if event.button == 1:
+                    krogec.pritisnjen = False
+                    krogec.gravitacija = g0
+                    krogec.hitrost = (0,0)
+        krogec.pozicija = (krogec.pozicija[0] ,krogec.pozicija[1] + krogec.hitrost[1])
+        if krogec.pritisnjen:
+            krogec.pozicija = (miska[0] - krogec.prijem[0],miska[1] - krogec.prijem[1])
+        if krogec.na_tleh(platnoDim[1]-100):
+            krogec.hitrost = (0,0)
+            krogec.pozicija = (krogec.pozicija[0],-krogec.radij + platnoDim[1]-100)
+        
+        ura.tick(FPS)
+        platno.fill(bela)
+        pygame.draw.rect(platno,zelena,[0,platnoDim[1]-100,platnoDim[0],platnoDim[1]])                   #narišemo tla
+        pygame.draw.circle(platno,crna,[int(krogec.pozicija[0]),int(krogec.pozicija[1])],krogec.radij,0) #krogec narišemo
+        pygame.display.update()
+            
+    pygame.quit()
+    quit()
+
+zogica()        </textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext112"), {
+				  lineNumbers: true,
+				  firstLineNumber: 51,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+        
+		<br><br>				  
+				  
+
+V glavni zanki sedaj potrebujemo pozicijo miške. Dobimo jo z ukazom <code>pygame.mouse.get_pos()</code> 
+in jo shranimo v spremenljivko <code>miska</code>.
+
+<br> <br>
+
+Nato, kjer pregledujemo dogodke, moramo preveriti, ali smo pritisnili gumb na miški. 
+Najprej preverjamo, ali je pritisnjen gumb na miški z ukazom <code>if event.type==pygame.MOSUEBUTTONDOWN. Event.button == 1</code> 
+predstavlja levi klik na miški, če bi vpisali 2, bi predstavljalo desni klik. Nato še preverimo 
+z metodo <code>klik_z_miško</code>, ali smo kliknili na žogico. Če smo jo, kličemo metodo <code>primi_z_miško</code>, saj tako žogico premikamo.
+
+<br> <br>
+Nato moramo še preveriti, ali smo spustili gumb na miški, to naredimo 
+z ukazom <code>if event.type==pygame.MOSUEBUTTONDOWN</code>. Seveda preverjamo samo, če smo žogico držali. 
+Če vse drži, potem spremenimo spremenljivko <code>pritisnjen</code> na <code>False</code>, saj žogico spustimo. 
+Žogici moramo tudi dodati prvotno gravitacijo in hitrost postaviti na (0,0), da žogica začne padati. 
+				  
+<br> <br>
+Sedaj moramo le še spremeniti pozicijo žogice, ko bomo premikali moško in hkrati držali žogico. 
+ Uporabimo enostaven stavek <code>if</code>, kjer preverimo ali žogico držimo z miško. Če jo držimo, popravimo 
+ središče žogice za pozicijo miške minus razdaljo, kot je bila med središčem žogice in pozicijo, ko smo kliknili nanjo.
+
+		<br> <br>	
+				  
+		<a  href="zogica4.zip" class="btn btn-primary" downoload>Prenesi me!</a>				  
+				  
+</div>
+<!----------------------------------------------------------------------------------->
+				  <br> <br>
+				  
+				  
+				  <div class="page-header">
+					<h1 id="lokostrelec">Razvoj igre - Lokostrelec</h1>
+				  </div>
+				  
+<img id="p2" src="slike/puscica.png" onclick="skrijLokostrelca()" height="40"> </img>
+<div id="lokostrelecVse">
+				  <a href="zgledi.html#videoLok" target="_blank">Klikni tukaj za ogled videa.</a>	
+<br> <br>	
+				  
+			 <img src="slike/lok.png" alt="Igra_kaca"  style="width:350px;"/>	 
+
+				  <section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext30>
+import pygame
+import time
+import random
+
+pygame.init()
+
+zelena= (0,255,0)
+crna= (0,0,0)
+modra= (0,0,255)
+temnoZ = (24,124,37)
+bela=(255,255,255)
+platnox=1100
+platnoy=800
+platno=pygame.display.set_mode((platnox,platnoy))
+pygame.display.set_caption("Lokostrelec")
+lok = pygame.image.load('lok.png')
+
+ura = pygame.time.Clock()  
+fps=30
+font = pygame.font.SysFont(None,40)</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext30"), {
+				  lineNumbers: true,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+
+	<br> <br>		
+			Najprej si uvozimo vse potrebne knjižnice, to so pygame in random. 
+			Najprej si pripravimo potrebne spremenljivke. Definiramo nekaj barv, 
+			dimenzije platna, ter platno samo. Nato si shranimo še platno, 
+			dodamu naslov igri ter naložiimo sliko za lok. Shranimo si še <code>uro</code>, za 
+			uravnavanje hitrosti igre, samo <code>hitrost</code>, ter obliko besedila.
+			
+			
+
+							  <section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext31>
+def tekst(msg,barva,x,y):   
+    besedilo = font.render(msg, True, barva)
+    platno.blit(besedilo, [x,y])
+
+def igra():
+    konec=False
+    stZadetkov=0 
+    stStrelov = 0
+       
+    d=150
+    dv=4
+    smer=1
+  
+    tx=platnox-20 
+    ty=0
+    
+    px=120
+    py=365
+    dx=20
+
+    lahkoStreljam=True
+    ustreljeno=False
+    zadeto= False</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext31"), {
+				  lineNumbers: true,
+				  firstLineNumber: 21,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+		
+<br> <br>
+		
+Najprej sestavimo kratko funkcijo, ki bo služila izpisu besedila na zaslon. 
+Funkcija bo sprejela 4 parametre: <code>besedilo</code>, ki ga želimo izpisati, <code>barvo</code> besedila
+ ter x in y koordinati pozicije besedila.			
+	
+	<br> <br>
+Za celotno aplikacijo sestavimo funkcijo, v kateri bo glavna zanka <code>while</code>, s katero bomo kontrolirali, 
+koliko časa se bo igra izvajala. V funkciji si definiramo spremenljivko <code>konec</code> in ji priredimo vrednost <code>False</code>. 
+Z njo bomo uravnavali koliko časa se bo zanka izvajala. 
+Potrebujemo še spremenljivki, ki bosta merili število vseh strelov in število zadetih.
+
+<br> <br>
+Potrebovali bomo tudi premikajočo tarčo. Definiramo ji dolžino, hitrost, smer potovanja ter pozicijo. 
+Nato definiramo še podatke o puščici. Puščica po samo ena, za lažjo izdelavo igre. Shranimo ji <code>pozicijo</code> in <code>hitrost</code>.
+
+<br> <br>
+
+Uporabnik bo lahko v igri ustrelil samo eno puščico v tarčo, šele ko se bo pojavila nova tarča, bo 
+lahko ponovno ustrelil. Zato potrebujemo še nekaj spremenljivk v katerih 
+bomo hranili, če lahko streljamo, ali smo že ustrelili v trenutno tarčo in ali je tarča bila zadeta.
+	
+	
+							  <section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext32>
+    while not konec:
+
+        if stStrelov==6: 
+            platno.fill(bela)
+            tekst("Od "+str(stStrelov-1)+ " strelov si zadel: "+str(stZadetkov), temnoZ,400,80)
+            tekst("Pritisni N za novo igro ali K za konec", modra,500,500)
+            pygame.display.update()
+			
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT: 
+                    konec = True
+            if event.type == pygame.KEYDOWN: 
+                if event.key == pygame.K_n:
+                    igra()
+                if event.key ==pygame.K_k:
+                    konec = True</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext32"), {
+				  lineNumbers: true,
+				  firstLineNumber: 44,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+
+			<br> <br>
+			
+Definirali smo si vse potrebno, tako lahko začnemo z zanko <code>while</code>. 
+Igralec bo imel na voljo omejeno strelov, v našem primeru 5. 
+Tako s stavkom <code>if</code> ob vsakem strelu preverimo, če je že bilo ustreljenih 
+dovoljenih strelov. Če jih je že, potem platno pobarvamo belo ter izpišemo 
+besedilo, ki izpiše besedilo ob koncu igre. Nato preverimo 
+dogodke ali pritisnemo križec za izhod in k za konec ter n za novo igro. 
+Še nastavimo <code>konec</code> na <code>True</code>, da skočimo iz zanke.
+
+<br> <br>
+
+Če uporabnik še ni ustrelil vseh strelov, potem ponovno pogledamo 
+dogodke, če slučajno pritisnemo križec za izhod, ter ali je bil pritisnjen presledek za 
+strel puščice. Ko izstrelimo puščico moramo postaviti <code>lahkoStreljam</code> na 
+<code>False</code> in <code>ustreljeno</code> na <code>True</code> in povečamo <code>stStrelov</code>.
+
+<br> <br>
+
+
+Vse skupaj moramo tudi narisat. Ozadje naj bo zeleno, nato narišemo sliko loka, 
+ter puščico. Na vsakem koraku spreminjamo tudi položaj tarče, da izgleda kot da se premika.
+
+
+
+
+							  <section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext33>
+        else: 
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT: 
+                    konec = True
+                if event.type == pygame.KEYDOWN:
+                    if lahkoStreljam and not zadeto and event.key == pygame.K_SPACE:
+                        lahkoStreljam=False
+                        ustreljeno=True
+                        stStrelov +=1
+                        
+            platno.fill(zelena)
+            platno.blit(lok,(100,300))
+            pygame.draw.line(platno,crna,(tx,ty),(tx,ty+d),5)
+            ty = ty+ (-1)**smer*dv </textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext33"), {
+				  lineNumbers: true,
+				  firstLineNumber: 60,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+
+
+<section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext34>
+            if ty > platnoy : 
+                if zadeto:
+                    dv=min (dv+0.2, 6.5) 
+                    d=max(40,0.9*d)
+                px=120 
+                py=365
+                ustreljeno=False
+                lahkoStreljam=True
+                zadeto=False
+                dilema=random.randint(1,2) 
+                if dilema ==1: 
+                    smer= 1
+                else: 
+                    ty=0
+                    smer=2</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext34"), {
+				  lineNumbers: true,
+				  firstLineNumber: 74,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+<br> <br>
+Vsaka zadeta tarča bo povečala težavnost igre tako, da se bo premikala hitreje. 
+Vsakič ko tarča pripotuje do vrha platna pogledamo, če je bila zadeta. V tem primeru 
+ji povečamo hitrost. Nato moramo tudi puščico postaviti v začeten položaj in nastaviti 
+spremenljivke <code>ustreljeno</code> na <code>False</code>, <code>lahkoStreljamo</code> na <code>True</code> in 
+<code>Zadeto</code> na <code>False</code>, zato da 
+bomo lahko ponovno ustrelili. Za raznolikost vpeljimo še spremenljivko, ki bo naključno 
+izbrala, kje se pojavi tarča(zgoraj ali spodaj).Podobno naredimo, če je tarča pripotovala 
+do spodnjega roba.
+
+<section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext35>
+                    elif ty < -d: 
+                if zadeto:
+                    dv=min (dv+0.2, 6.5) 
+                    d=max(40,0.9*d)
+                px=120
+                py=365
+                ustreljeno=False
+                lahkoStreljam=True
+                zadeto=False
+                dilema=random.randint(1,2)
+                if dilema ==1: 
+                    smer=2
+                else:
+                    ty=platnoy
+                    smer=1</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext35"), {
+				  lineNumbers: true,
+				  firstLineNumber: 89,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+<br> <br>
+
+V primeru da je bila tarča zadeta, moramo puščici spremeniti smer in 
+hitrost potovanja, da bo potovala skupaj s tarčo. Poleg tega nastavimo ustreljeno 
+na <code>False</code>. Puščica je namreč v tarči in ne potuje več.
+
+<br> <br>
+
+Če je ustreljeno, potem mora puščica potovati po x osi. Ustrezno z njeno hitrostjo dx spreminjamo njeni koordinati.
+
+<section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext36>
+			if zadeto:
+                ustreljeno = False
+                pygame.draw.line(platno,crna,(tx-30,py ),(tx,py ),2)
+                py=py+(-1)**smer*dv
+                
+            if ustreljeno:
+                pygame.draw.line(platno,crna,(px,py),(px+30,py),2)
+                px= px+ dx
+                if abs((px +30) - tx) < 15:
+                    if py > ty and py < (ty+d): 
+                        stZadetkov +=1
+                        zadeto = True</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext36"), {
+				  lineNumbers: true,
+				  firstLineNumber: 104,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+			<br> <br>
+
+Zanima nas, če bo sekala tarčo. Gledamo konico puščice, zanima pa nas, 
+kdaj bo dosegla x koordinato tarče. Zaradi nezveznosti modela, enakost ne bo 
+nujno izpolnjena, si pa želimo, da bo razlika blizu 0 (15 ali manj). 
+V tem primeru smo zadeli tarčo in povečamo število zadetkov za 1, 
+hkrati pa nastavimo <code>zadeto</code> na <code>True</code>, sedaj je puščica v tarči. 
+
+Na koncu uporabniku še prikažemo njegov rezultat.
+			
+
+
+			<section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext37>
+            tekst("Tvoj rezultat:"+str(stZadetkov)+"/"+str(stStrelov), temnoZ,400,80)
+            pygame.display.update()
+            ura.tick(fps)
+    pygame.quit()
+    quit()
+
+igra()</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext37"), {
+				  lineNumbers: true,
+				  firstLineNumber: 116,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			  
+			</section>
+	
+<br>
+		<a  href="LOKOSTRELEC.zip" class="btn btn-primary" downoload>Prenesi me!</a>
+				</div> <!-- /container -->
+
+</div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bootstrap/assets/js/docs.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="sl">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <title>Programirajmo igre v Pythonu</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="bootstrap/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="theme.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="bootstrap/assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	
+	<link rel=stylesheet href="lib/codemirror.css">
+	<script src="lib/codemirror.js"></script>
+	<script src="lib/codemirror_mode/python/python.js"></script>
+	<script src="funkcija.js"></script>
+
+	<style>
+	  .CodeMirror { height: auto; border: 1px solid #ddd; }
+	  .CodeMirror-scroll { max-height: 250px; }
+	  .CodeMirror pre { padding-left: 7px; line-height: 1.25; }
+	</style>
+	
+	
+	
+  </head>
+
+  <body onload="initialise(0)" role="document">
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="index.html">Domov</a></li>
+            <li ><a href="oPygame.html">O Pygame</a></li>
+			<li><a href="osnove.html">Zbirka ukazov</a></li>
+            
+
+            <li class="dropdown">
+              <a href="razvoji.html" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Razvoj aplikacij<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="razvoji.html#kaca">Igra - Kača</a></li>
+                <li><a href="razvoji.html#zogica">Igra - Žogica</a></li>
+                <li><a href="razvoji.html#lokostrelec">Igra - Lokostrelec</a></li>
+
+              </ul>
+            </li>
+		<li><a href="kvizi.html">Kvizi</a></li>
+	    <li class="active"><a href="zgledi.html">Končni zgledi</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+
+	<div class="container theme-showcase" role="main">
+	
+		<div class="page-header">
+					<h1 id="naslov_zgledi">Zgled aplikacij z uporabo knjižnice Pygame:</h1>
+		</div>
+			
+			<section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext>
+import pygame
+import krog_objekt as kr
+
+
+pygame.init()
+
+FPS = 60
+
+platno_x = 800
+platno_y = 600
+
+platnoDim = (platno_x,platno_y)
+bela = (255,255,255)
+zelena = (0,180,0)
+crna = (0,0,0)
+
+boing = pygame.mixer.Sound("boing.wav")
+platno = pygame.display.set_mode((platno_x,platno_y))
+ura = pygame.time.Clock()
+
+g0 = 40/FPS
+
+def animacija():
+    ## pozicja miške, čene je "is not defined"
+    miska = (0,0)
+    miska1 = (0,0) # hittrost miške
+    hitrost_miska_x = 0
+    hitrost_miska_y = 0
+    slovar_krogcev = {}
+    n=1
+    slovar_krogcev[str(1)] = kr.krog((200,200),20,(0,0),g0,ro=0.7)
+    #slovar_krogcev[str(2)] = kr.krog((400,400),20,(0,0),g0,ro=0.7)
+
+    izhod = False
+    while not izhod:
+        for krogec in slovar_krogcev.values():
+            if krogec.pozicija[1]+krogec.radij != platnoDim[1]-100:
+                krogec.pospesi()
+
+            if krogec.proznost == 1:
+                magicniFaktor = 0
+            else:
+                magicniFaktor = 2
+            
+            miska = pygame.mouse.get_pos()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT: #ko pritisnemo križec
+                        izhod = True
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1 and krogec.klik_z_misko(miska):
+
+                        krogec.primi_z_misko(miska)
+                if event.type == pygame.MOUSEBUTTONUP and krogec.pritisnjen == True:
+                    if event.button == 1:
+                        krogec.pritisnjen = False
+                        krogec.gravitacija = g0
+                        krogec.hitrost = (hitrost_miska_x,hitrost_miska_y)
+            if krogec.pritisnjen:
+                krogec.pozicija = (miska[0] - krogec.prijem[0],miska[1] - krogec.prijem[1])
+            platno.fill(bela)
+            boing.set_volume((1/200)*((krogec.hitrost[0]**2+krogec.hitrost[1]**2)**(1/2)))
+            if krogec.na_tleh(platnoDim[1]-100):
+                pygame.mixer.Sound.play(boing)
+                krogec.hitrost = (krogec.hitrost[0]*0.95,-(krogec.hitrost[1]-magicniFaktor*krogec.gravitacija)*krogec.proznost) 
+                krogec.pozicija = (krogec.pozicija[0],-krogec.radij + platnoDim[1]-100)
+
+            if krogec.igraj:
+                pygame.mixer.Sound.play(boing)
+                krogec.igraj = False
+              
+            krogec.zaleti_v_rob(platnoDim)
+            krogec.pozicija = (krogec.pozicija[0] + krogec.hitrost[0],krogec.pozicija[1] + krogec.hitrost[1]) 
+            ura.tick(FPS)
+            miska1 = pygame.mouse.get_pos()
+            hitrost_miska_x = (miska1[0]-miska[0])
+            hitrost_miska_y = (miska1[1]-miska[1])
+            
+        for krogec in slovar_krogcev.values():
+            pygame.draw.rect(platno,zelena,[0,platnoDim[1]-100,platnoDim[0],platnoDim[1]])
+            pygame.draw.circle(platno,crna,[int(krogec.pozicija[0]),int(krogec.pozicija[1])],krogec.radij,0)
+        pygame.display.update()
+            
+    pygame.quit()
+    quit()
+
+animacija()
+
+			</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext"), {
+				  lineNumbers: true,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			</section>
+		<br>
+		<br>
+
+		<iframe id="videoZogica" src="https://player.vimeo.com/video/144618899?color=c9ff23&byline=0&portrait=0" width="1000" height="550" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+		
+		
+		
+		<section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext2>
+import pygame
+import time
+import random
+
+#OGRODJE
+pygame.init() #inicializira funkcije iz pygame
+
+bela = (255,255,255)
+crna = (0,0,0)
+modra = (0,0,255)
+rdeca = (255,0,0)
+pisano = (150,100,200)
+FPS = 15
+
+smer = "desno"
+
+platno_x = 1100
+platno_y = 600
+
+platno = pygame.display.set_mode((platno_x,platno_y)) #platno s podanimi dimenzijami
+pygame.display.set_caption("MOJA IGRA") #naslov programa
+glava = pygame.image.load('snake.png')
+telo = pygame.image.load('telo.png')
+
+jabolko = pygame.image.load('jabolko.png')
+ura = pygame.time.Clock()  #ura
+
+font = pygame.font.SysFont(None,40)
+
+def sporocilo(msg,barva):   #funkcija za izpis besedila
+    besedilo = font.render(msg, True, barva)
+    platno.blit(besedilo, [platno_x/7,platno_y/2])
+
+def kaca(nasaVelikost,seznamKace):
+    if smer == "gor":
+        glavaPoz = pygame.transform.rotate(glava,180)
+    if smer == "levo":
+        glavaPoz = pygame.transform.rotate(glava,270)
+    if smer == "desno":
+        glavaPoz = pygame.transform.rotate(glava,90)
+    if smer == "dol":
+        glavaPoz = glava
+        
+    platno.blit(glavaPoz, (seznamKace[-1][0],seznamKace[-1][1]))
+    
+    for XY in seznamKace[:-1]:
+        platno.blit(telo, (XY[0],XY[1]))
+    
+
+def igra():
+    global smer
+    igraIzhod = False #ali igra teče
+    igraKonec = False
+
+    nasaVelikost = 20
+    velikostKocke = 20
+    
+    koord_x = round((platno_x/2 - 10)/20)*20
+    koord_y = round((platno_y/2 - 10)/20)*20
+    sprememba_x = nasaVelikost
+    sprememba_y = 0
+
+    dolzinaKace = 1
+    seznamKace = []
+    
+    
+    
+    kockaX = round(random.randrange(0,platno_x - velikostKocke)/20)*20
+    kockaY = round(random.randrange(0,platno_y - velikostKocke)/20)*20
+
+    
+    while not igraIzhod:
+
+        while igraKonec == True:
+            platno.fill(bela)
+            sporocilo("ZALETEL SI SE PRITISNI P ZA PONOVNO IGRANJE, I ZA IZHOD",pisano)
+            pygame.display.update()
+
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_p:
+                        igra()
+                    if event.key == pygame.K_i:
+                        igraIzhod = True
+                        igraKonec = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: #ko pritisnemo križec
+                igraIzhod = True
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT and smer != "desno":
+                    smer = "levo"
+                    sprememba_x = -nasaVelikost
+                    sprememba_y = 0
+                if event.key == pygame.K_RIGHT and smer != "levo":
+                    smer = "desno"
+                    sprememba_x = nasaVelikost
+                    sprememba_y = 0
+                if event.key == pygame.K_UP and smer != "dol":
+                    smer = "gor"
+                    sprememba_y = -nasaVelikost
+                    sprememba_x = 0
+                if event.key == pygame.K_DOWN and smer != "gor":
+                    smer = "dol"
+                    sprememba_y = nasaVelikost
+                    sprememba_x = 0
+##            if event.type == pygame.KEYUP:
+##                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+##                    sprememba_x = 0
+##                if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+##                    sprememba_y = 0
+                    
+
+        for kosKace in seznamKace[:-1]:
+            if kosKace == glavaKace:
+                igraKonec = True
+        
+        if koord_x + nasaVelikost > platno_x or koord_x < 0 or koord_y + nasaVelikost > platno_y or koord_y < 0:
+            igraKonec = True
+
+        if kockaX - nasaVelikost < koord_x < kockaX + velikostKocke and kockaY - nasaVelikost < koord_y < kockaY + velikostKocke:
+            kockaX = round(random.randrange(0,platno_x - velikostKocke)/20)*20
+            kockaY = round(random.randrange(0,platno_y - velikostKocke)/20)*20
+            seznamKace.append(glavaKace)
+
+        koord_x += sprememba_x
+        koord_y += sprememba_y
+
+        
+        platno.fill(bela)  #zapolni platno
+        platno.blit(jabolko,[kockaX,kockaY])
+        #pygame.draw.rect(platno,crna,[kockaX,kockaY,velikostKocke,velikostKocke])
+
+        glavaKace = []
+        glavaKace.append(koord_x)
+        glavaKace.append(koord_y)
+        seznamKace.append(glavaKace)
+
+        if len(seznamKace) > dolzinaKace:
+            del seznamKace[0]
+        
+
+        kaca(nasaVelikost,seznamKace)
+        
+        pygame.display.update()  #posodobi platno, parameter določa katero mesto
+        ura.tick(FPS) #frames per second
+
+    pygame.quit()
+    quit()
+
+igra()
+
+
+			</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext2"), {
+				  lineNumbers: true,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			</section>
+			
+		<br>
+		<br>
+
+		<iframe id="videoKaca" src="https://player.vimeo.com/video/144619505?color=c9ff23&byline=0&portrait=0" width="1000" height="550" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+
+		
+		
+		
+		
+		
+			<section id=demo>
+			  <!--<h2>Okno CodeMirror</h2> -->
+			  <br>
+			  <br>
+			  <form style="position: relative;"><textarea id=demotext75>
+import pygame
+import time
+import random
+
+pygame.init()
+
+zelena= (0,255,0)
+crna= (0,0,0)
+modra= (0,0,255)
+temnoZ = (24,124,37)
+bela=(255,255,255)
+platnox=1100
+platnoy=800
+platno=pygame.display.set_mode((platnox,platnoy))
+pygame.display.set_caption("Lokostrelec")
+lok = pygame.image.load('lok.png')
+
+ura = pygame.time.Clock()  
+fps=30
+font = pygame.font.SysFont(None,40)
+
+def tekst(msg,barva,x,y):   
+    besedilo = font.render(msg, True, barva)
+    platno.blit(besedilo, [x,y])
+
+def igra():
+    konec=False
+    stZadetkov=0 
+    stStrelov = 0
+
+    d=150
+    dv=4
+    tx=platnox-20 
+    ty=0
+    
+    px=120
+    py=365
+    dx=20
+
+    lahkoStreljam=True
+    ustreljeno=False
+    zadeto= False
+    
+    while not konec:
+
+        if stStrelov==6: 
+            platno.fill(bela)
+            tekst("Od "+str(stStrelov-1)+ " strelov si zadel: "+str(stZadetkov), temnoZ,400,80)
+            tekst("Pritisni N za novo igro ali K za konec", modra,500,500)
+            pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT: 
+                    konec = True
+            if event.type == pygame.KEYDOWN: 
+                if event.key == pygame.K_n:
+                    igra()
+                if event.key ==pygame.K_k:
+                    konec = True
+        else: 
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT: 
+                    konec = True
+                if event.type == pygame.KEYDOWN: 
+                    if lahkoStreljam and not zadeto and event.key == pygame.K_SPACE:
+                        lahkoStreljam=False
+                        ustreljeno=True
+                        stStrelov +=1
+                        
+            platno.fill(zelena)
+            platno.blit(lok,(100,300))
+            pygame.draw.line(platno,crna,(tx,ty),(tx,ty+d),5)
+            ty = ty+ (-1)**smer*dv
+            
+            if ty > platnoy : 
+                if zadeto:
+                    dv=min (dv+0.2, 6.5) 
+                    d=max(40,0.9*d)
+                px=120 
+                py=365
+                ustreljeno=False
+                lahkoStreljam=True
+                zadeto=False
+                dilema=random.randint(1,2) 
+                if dilema ==1: 
+                    smer= 1
+                else: 
+                    ty=0
+                    smer=2
+            elif ty < -d: 
+                if zadeto:
+                    dv=min (dv+0.2, 6.5) 
+                    d=max(40,0.9*d)
+                px=120
+                py=365
+                ustreljeno=False
+                lahkoStreljam=True
+                zadeto=False
+                dilema=random.randint(1,2)
+                if dilema ==1: 
+                    smer=2
+                else:
+                    ty=platnoy
+                    smer=1
+                    
+            if zadeto:
+                ustreljeno = False
+                pygame.draw.line(platno,crna,(tx-30,py ),(tx,py ),2)
+                py=py+(-1)**smer*dv
+                
+            if ustreljeno:
+                pygame.draw.line(platno,crna,(px,py),(px+30,py),2)
+                px= px+ dx
+                if abs((px +30) - tx) < 15:
+                    if py > ty and py < (ty+d): 
+                        stZadetkov +=1
+                        zadeto = True
+                        
+            tekst("Tvoj rezultat:"+str(stZadetkov)+"/"+str(stStrelov), temnoZ,400,80)
+            pygame.display.update()
+            ura.tick(fps)
+               
+    pygame.quit()
+    quit()
+
+igra()		</textarea>
+
+			  <script>
+				var editor = CodeMirror.fromTextArea(document.getElementById("demotext75"), {
+				  lineNumbers: true,
+				  mode: "text/x-cython",
+				  matchBrackets: true
+				});
+			  </script>
+
+			</section>
+			
+		<br>
+		<br>
+		
+		
+		
+			
+		
+		
+		
+		
+		
+				<iframe id='videoLok' src="https://player.vimeo.com/video/160893053?color=c9ff23&byline=0&portrait=0" width="1000" height="550" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+		
+		
+		
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bootstrap/assets/js/docs.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

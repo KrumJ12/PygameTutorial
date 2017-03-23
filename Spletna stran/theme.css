@@ -1,0 +1,75 @@
+body {
+  padding-top: 70px;
+  padding-bottom: 30px;
+}
+
+.theme-dropdown .dropdown-menu {
+  position: static;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.theme-showcase > p > .btn {
+  margin: 5px 0;
+}
+
+.theme-showcase .navbar .container {
+  width: auto;
+}
+
+
+.droptarget {
+    float: initial; 
+    width: 100%; 
+    height: 60px;
+    margin: 2px;
+    padding: 2px;
+    border: 3px solid #aaaaaa;
+}
+
+.pravilnoMesto {
+
+    border: 10px solid #00ff00;
+}
+
+.napacnoMesto {
+    border: 10px solid #ff0000;
+}
+
+/*Povzeto po: http://stackoverflow.com/questions/2011142/how-to-change-the-style-of-title-attribute-inside-the-anchor-tag */
+a {
+  color: #900;
+  text-decoration: none;
+}
+
+a:hover {
+  color: red;
+  position: relative;
+}
+
+a[opisnapake]:hover:after {
+  content: attr(opisnapake);
+  padding: 4px 8px;
+  color: #333;
+  position: absolute;
+  left: 35%;
+  top: 20%;
+  z-index: 1;
+  white-space: nowrap;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  -moz-box-shadow: 0px 0px 4px #222;
+  -webkit-box-shadow: 0px 0px 4px #222;
+  box-shadow: 0px 0px 4px #222;
+  background-image: -moz-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #eeeeee),color-stop(1, #cccccc));
+  background-image: -webkit-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -moz-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -ms-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -o-linear-gradient(top, #eeeeee, #cccccc);
+    margin-top: -4px;
+    border-width: 4px;
+    border-style: solid;
+    border-color: transparent black transparent transparent;
+}

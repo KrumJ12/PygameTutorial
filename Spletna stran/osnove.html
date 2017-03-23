@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="sl">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <title>Programirajmo igre v Pythonu</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="bootstrap/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="theme.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="bootstrap/assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body role="document">
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="index.html">Domov</a></li>
+            <li><a href="oPygame.html">O Pygame</a></li>
+			<li class="active"><a href="osnove.html">Zbirka ukazov</a></li>   
+            
+
+            <li class="dropdown">
+              <a href="razvoji.html" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Razvoj aplikacij<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="razvoji.html#kaca">Igra - Kača</a></li>
+                <li><a href="razvoji.html#zogica">Igra - Žogica</a></li>
+                <li><a href="razvoji.html#lokostrelec">Igra - Lokostrelec</a></li>
+
+              </ul>
+            </li>
+		<li><a href="kvizi.html">Kvizi</a></li>
+	    <li><a href="zgledi.html">Končni zgledi</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+
+	
+	<div class="container theme-showcase" role="main">
+
+
+			<!--<h2> Naslov1 </h2> -->
+					<div class="col-sm-20">
+					  <div class="panel panel-default">
+						<div class="panel-heading">
+						  <h2 class="panel-title">Zbirka osnovnih ukazov za delo s knjižnico Pygame</h2>
+						</div>
+						<div class="panel-body">
+Po uspešni namestitvi knjižnice (glej prejšnji razdelek), se lahko lotimo programiranja.
+
+<br><br>Začnemo s stavkom:
+<br><code>"import pygame"</code>
+<br>Ta uvozi paket z vsemi razpoložljivi moduli iz knjižnice Pygame.
+<br><br>Klic stavka:
+<br><code>"pygame.init()"</code> pa požene vsakega izmed teh modulov.
+
+<br><br>Moduli, ki so na voljo:
+<ul>
+<li>cdrom</li>
+<li>cursors</li>
+<li>display</li>
+<li>event</li>
+<li>font</li>
+<li>image</li>
+<li>joystick</li>
+<li>key</li>
+<li>mouse</li>
+<li>movie</li>
+<li>sndarray</li>
+<li>surfarray</li>
+<li>time</li>
+<li>transform</li>
+</ul>
+<br>Z ukazom <code>"pygame.display.set_mode()"</code> nastavimo okno,
+znotraj katerega bomo prikazovali objekte. <br>
+<br>
+To okno lahko shranimo
+v svojo spremenljivko:
+<br><code>"okno = pygame.display.set_mode(1024,768)"</code>
+<br><br>
+Za uvoz slikovnih formatov uporabimo ukaz <code>"pygame.image.load()"</code>.
+Potem pa z ukazom <code>"okno.blit(kaj,kam)"</code> prenesemo to sliko v okno na
+želeno pozicijo in prikažemo z ukazom <code>"pygame.display.flip()"</code>.
+
+<br> Če zgornje ukaze združimo v preprost program - izris žoge na platnu (s pomočjo modulov display in image)
+<br> <br>
+<img src="slike/zoga.png" alt="Primer_zoga"  style="width:550px;"/>
+<br> <br>
+Da spravimo žogo v gibanje pa moramo ukaz za prikaz žoge spraviti v zanko.
+V naslednjem razdelku (Razvoj aplikacij) si bomo ogledali tako animacijo.
+
+
+
+
+						</div>
+					  </div>
+				</div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bootstrap/assets/js/docs.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
